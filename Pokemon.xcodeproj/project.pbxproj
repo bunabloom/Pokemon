@@ -17,9 +17,11 @@
 		9F18CDBD2C5B731A00646D2E /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = 9F18CDBC2C5B731A00646D2E /* RxCocoa */; };
 		9F18CDBF2C5B731A00646D2E /* RxRelay in Frameworks */ = {isa = PBXBuildFile; productRef = 9F18CDBE2C5B731A00646D2E /* RxRelay */; };
 		9F18CDC22C5B732900646D2E /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 9F18CDC12C5B732900646D2E /* SnapKit */; };
-		9F18CDC42C5B735000646D2E /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F18CDC32C5B735000646D2E /* MainView.swift */; };
 		9F18CDC62C5B739600646D2E /* CollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F18CDC52C5B739600646D2E /* CollectionViewCell.swift */; };
 		9F18CDC82C5B745200646D2E /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F18CDC72C5B745200646D2E /* Model.swift */; };
+		9F18CDCC2C5B78FC00646D2E /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F18CDCB2C5B78FC00646D2E /* DetailViewController.swift */; };
+		9F18CDCE2C5B79B200646D2E /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F18CDCD2C5B79B200646D2E /* NetworkManager.swift */; };
+		9F18CDD02C5B8ABF00646D2E /* Etc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F18CDCF2C5B8ABF00646D2E /* Etc.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -31,9 +33,11 @@
 		9F18CDAA2C5B722E00646D2E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		9F18CDAC2C5B722E00646D2E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9F18CDB72C5B72C000646D2E /* ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
-		9F18CDC32C5B735000646D2E /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		9F18CDC52C5B739600646D2E /* CollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewCell.swift; sourceTree = "<group>"; };
 		9F18CDC72C5B745200646D2E /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
+		9F18CDCB2C5B78FC00646D2E /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
+		9F18CDCD2C5B79B200646D2E /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
+		9F18CDCF2C5B8ABF00646D2E /* Etc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Etc.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -95,7 +99,7 @@
 			isa = PBXGroup;
 			children = (
 				9F18CDA52C5B722D00646D2E /* MainViewController.swift */,
-				9F18CDC32C5B735000646D2E /* MainView.swift */,
+				9F18CDCB2C5B78FC00646D2E /* DetailViewController.swift */,
 				9F18CDC52C5B739600646D2E /* CollectionViewCell.swift */,
 			);
 			path = View;
@@ -112,6 +116,8 @@
 		9F18CDB62C5B729700646D2E /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				9F18CDCD2C5B79B200646D2E /* NetworkManager.swift */,
+				9F18CDCF2C5B8ABF00646D2E /* Etc.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -199,10 +205,12 @@
 				9F18CDC82C5B745200646D2E /* Model.swift in Sources */,
 				9F18CDA62C5B722D00646D2E /* MainViewController.swift in Sources */,
 				9F18CDA22C5B722D00646D2E /* AppDelegate.swift in Sources */,
+				9F18CDD02C5B8ABF00646D2E /* Etc.swift in Sources */,
 				9F18CDC62C5B739600646D2E /* CollectionViewCell.swift in Sources */,
+				9F18CDCE2C5B79B200646D2E /* NetworkManager.swift in Sources */,
 				9F18CDB82C5B72C000646D2E /* ViewModel.swift in Sources */,
-				9F18CDC42C5B735000646D2E /* MainView.swift in Sources */,
 				9F18CDA42C5B722D00646D2E /* SceneDelegate.swift in Sources */,
+				9F18CDCC2C5B78FC00646D2E /* DetailViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

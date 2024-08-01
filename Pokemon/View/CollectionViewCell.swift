@@ -8,3 +8,7 @@
 import UIKit
 import SnapKit
 
+class CollectionViewCell: UICollectionView {
+  
+  
+}
