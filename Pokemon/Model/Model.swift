@@ -7,19 +7,14 @@
 
 import Foundation
 struct Constants {
-  let imageURL = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/54.png"
+  
   
   
 }
 
 
 
-// MARK: - PokemonModel
-
-
-
-
-
+// MARK: - PokemonModelDetailInfo
 
 struct PokemonModel: Codable {
     let id: Int?
