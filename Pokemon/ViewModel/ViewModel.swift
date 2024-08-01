@@ -17,6 +17,10 @@ import RxSwift
 ///
 ///
 class PokemonViewModel {
+//  private disposeBag = DisposeBag()
+//  let domainString = "https://pokeapi.co/api"
+//  static let  = /v2/pokemon?limit=\(limit)&offset=\(offset)"
+  
   
   
 }
