@@ -17,10 +17,22 @@ import RxSwift
 ///
 ///
 class PokemonViewModel {
-//  private disposeBag = DisposeBag()
-//  let domainString = "https://pokeapi.co/api"
-//  static let  = /v2/pokemon?limit=\(limit)&offset=\(offset)"
+  private let disposeBag = DisposeBag()
+  let domainString = "https://pokeapi.co/api/v2/pokemon?limit=20&offset=0"
   
+  let pokemonSubject = BehaviorSubject(value:[PokemonModel]())
   
+  init(){
+    fetchPokeData()
+  }
+  
+  func fetchPokeData(){
+    guard let url = URL(string: domainString)
+    else{ pokemonSubject.onError(NetworkError.dataFetchFail); return }
+    NetworkManager.shared.fetch(url: url)
+      .subscribe(onSuccess: { [weak self] pokeResponse: PokeResponse}
+      
+
+  }
   
 }

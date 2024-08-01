@@ -11,7 +11,9 @@ import RxSwift
 
 class MainViewController: UIViewController {
   private let viewModel = PokemonViewModel()
+  
   private let diposeBag = DisposeBag()
+  
   private var pokemonImages = ""
   
   private let imageView = {
@@ -22,12 +24,11 @@ class MainViewController: UIViewController {
     iv.layer.cornerRadius = 65
     iv.contentMode = .scaleAspectFit
     iv.clipsToBounds = true
-    
     return iv
   }()
   
   lazy var collectionView = {
-    let cv = UICollectionView(frame: .zero,collectionViewLayout: createLayout())
+    let cv = UICollectionView(frame: .zero,collectionViewLayout: createCellLayout())
     cv.register(PokemonCell.self, forCellWithReuseIdentifier: PokemonCell.id)
     cv.delegate = self
     cv.dataSource = self
@@ -45,45 +46,47 @@ class MainViewController: UIViewController {
   
   
   
-  
-  private func createLayout() -> UICollectionViewLayout {
+///셀 사이즈와 셀 간격을 설정해주는 메서드
+  private func createCellLayout() -> UICollectionViewLayout {
+///각 셀간의 간격 10 설정
+    let itemSpacing: CGFloat = 10
+/// row당 3개의 cell을 설정
+    let itemsPerRow: CGFloat = 3
+//각 셀당 의 가로길이 계산법  (뷰의 넓이  빼기 (셀개수 곱하기 셀간격)) 셀 개수
+    let width = (view.frame.width - (itemsPerRow - 1) * itemSpacing) / itemsPerRow
     
-    let itemSize = NSCollectionLayoutSize(
-      widthDimension: .fractionalWidth(1.0),
-      heightDimension: .fractionalHeight(1.0)
-    )
-    let item = NSCollectionLayoutItem(layoutSize: itemSize)
-    
-    let  groupSize = NSCollectionLayoutSize(
-      widthDimension: .fractionalWidth(1.0),
-      heightDimension: .fractionalHeight(1.0)
-    )
-    let group = NSCollectionLayoutGroup(layoutSize: groupSize)
-    
-    let section = NSCollectionLayoutSection(group: group)
-    section.orthogonalScrollingBehavior = .continuous
-    section.interGroupSpacing = 10
-    section.contentInsets = .init(top: 10, leading: 10, bottom: 20, trailing: 10)
-    
-    
-    return UICollectionViewCompositionalLayout(section: section)
+    let layout = {
+      let lo = UICollectionViewFlowLayout()
+      lo.itemSize = CGSize(width: width, height: width)
+      lo.minimumLineSpacing = itemSpacing
+      lo.minimumInteritemSpacing = itemSpacing
+      return lo
+    }()
+    return layout
     
   }
-
-  
+/// UI설정
   private func configureUI() {
     view.backgroundColor = UIColor.mainRed
     
     [
       imageView,
+      collectionView
     
     ].forEach{view.addSubview($0)}
     
     imageView.snp.makeConstraints{
       $0.centerX.equalToSuperview()
-      $0.top.equalToSuperview().offset(90)
+      $0.top.equalToSuperview().offset(100)
       $0.width.equalTo(130)
       $0.height.equalTo(130)
+    }
+    
+    collectionView.snp.makeConstraints{
+      $0.top.equalTo(imageView.snp.bottom).offset(20)
+      $0.centerX.equalToSuperview()
+      $0.width.equalToSuperview()
+      $0.bottom.equalToSuperview().offset(-50)
     }
 
   }
@@ -106,11 +109,14 @@ extension MainViewController: UICollectionViewDelegate {
 
 extension MainViewController: UICollectionViewDataSource{
   func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-    return 0
+    return 20
   }
   
   func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-    return UICollectionViewCell()
+    
+    guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PokemonCell.id, for: indexPath) as? PokemonCell else { return UICollectionViewCell()}
+    
+    return cell
   }
   
   

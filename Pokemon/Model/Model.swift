@@ -21,18 +21,13 @@ struct PokemonModel: Codable {
     let name: String?
     let types: [TypeElement]?
     let height, weight: Int?
-
 }
 
-// MARK: - TypeElement
 struct TypeElement: Codable {
-    let slot: Int?
     let type: TypeType
 }
 
-// MARK: - TypeType
 struct TypeType: Codable {
     let name: String
-    let url: String
 }
 

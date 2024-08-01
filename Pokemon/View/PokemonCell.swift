@@ -36,7 +36,7 @@ class PokemonCell: UICollectionViewCell {
     imageView.image = nil
   }
   
-  func configure(with id: PokemonModel){
+  func configure(){
     
 //    guard let pokemonId = PokemonModel().id else { return }
     
