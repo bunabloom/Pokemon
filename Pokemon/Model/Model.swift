@@ -16,10 +16,17 @@ struct ResponseResult: Codable {
   let url: String?
   
   var pokemonID: String {
-    guard let id = url else { return "ID없음"}
-    let temp = id.index(id.endIndex, offsetBy: -2)
-    //print(id[temp])
-    return String(id[temp])
+      guard let url = url else { return "" }
+      
+      // URL을 "/"로 분할하여 배열 생성
+      let components = url.split(separator: "/")
+      
+      // 마지막 구성 요소가 숫자인지 확인하고 반환
+      if let lastComponent = components.last, let id = Int(lastComponent) {
+          return String(id)
+      }
+      
+      return ""
   }
 }
 // 여기에서 가지고 온 url을 가지고 다시 fetch 작업을 해서 이미지를 가져올것임

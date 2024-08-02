@@ -10,8 +10,10 @@ import SnapKit
 import RxSwift
 
 class MainViewController: UIViewController {
-  private let viewModel = PokemonViewModel()
   
+  private let viewModel = MainViewModel()
+  
+
   private let diposeBag = DisposeBag()
   
   private var pokemonImages = ""
@@ -35,16 +37,12 @@ class MainViewController: UIViewController {
     cv.backgroundColor = .black
     return cv
   }()
-  
-
-
   override func viewDidLoad() {
     super.viewDidLoad()
     configureUI()
     bind()
     // Do any additional setup after loading the view.
   }
-  
   
   private func bind() {
     viewModel.pokemonSubject
@@ -64,7 +62,7 @@ class MainViewController: UIViewController {
     let itemSpacing: CGFloat = 10
 /// row당 3개의 cell을 설정
     let itemsPerRow: CGFloat = 3
-//각 셀당 의 가로길이 계산법  (뷰의 넓이  빼기 (셀개수 곱하기 셀간격)) 셀 개수
+///각 셀당 의 가로길이 계산법  (뷰의 넓이  빼기 (셀개수 곱하기 셀간격)) 셀 개수
     let width = (view.frame.width - (itemsPerRow - 1) * itemSpacing) / itemsPerRow
     
     let layout = {
@@ -103,16 +101,20 @@ class MainViewController: UIViewController {
 
   }
   
-
-
 }
 
 extension MainViewController: UICollectionViewDelegate {
   func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-    let detailViewController = DetailViewController()
-/// 여기에서 값을 전달 해줘야함
-    detailViewController.pokemon = nil
+   
     
+/// 여기에서 값을 전달 해줘야함 어떻게?
+    /// 일단 id는 알아 근데 id로 데이터 값을 아 url 이 있으니까 
+
+    let pokemon = pokemonListSubject[indexPath.row]
+ //   detailViewController.pokemonID = pokemon.pokemonID
+//    detailViewController.pokemon = nil
+//    print(#function,pokemon.pokemonID)
+    let detailViewController = DetailViewController(viewModel: DetailViewModel(pokemonID: pokemon.pokemonID))
     self.navigationController?.pushViewController(detailViewController, animated: true)
 
   }
@@ -129,8 +131,8 @@ extension MainViewController: UICollectionViewDataSource{
     guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PokemonCell.id, for: indexPath) as? PokemonCell 
     else { return UICollectionViewCell()}
     let pokemon = pokemonListSubject[indexPath.row]
-    print(pokemon.pokemonID)
-    cell.configure(with: "10")
+    //print(pokemon.pokemonID)
+    cell.configure(with: pokemon.pokemonID)
     return cell
   }
   

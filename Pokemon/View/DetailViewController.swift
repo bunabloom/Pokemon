@@ -8,9 +8,27 @@
 import UIKit
 import SnapKit
 import Kingfisher
+import RxSwift
+
 class DetailViewController: UIViewController {
   
-  var pokemon: PokemonModel?
+
+  private var viewModel: DetailViewModel
+  
+  init(viewModel: DetailViewModel) {
+
+    self.viewModel = viewModel
+    super.init(nibName: nil, bundle: nil)
+  }
+  
+  
+  required init?(coder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
+  //동작
+  
+  private let disposeBag = DisposeBag()
+  
   
   let backgroundview = {
     let view = UIView()
@@ -24,14 +42,14 @@ class DetailViewController: UIViewController {
     let iv = UIImageView()
     iv.clipsToBounds = true
     
-    iv.kf.setImage(with:URL(string: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/54.png"))
+    iv.kf.setImage(with:URL(string: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/\(viewModel.pokemonID).png"))
     return iv
   }()
   
   lazy var stackView = {
     let sv = UIStackView(arrangedSubviews: [pokemonIdLabel,pokemonName])
     sv.axis = .horizontal
-    sv.distribution = .fillEqually
+    sv.distribution = .fillProportionally
     return sv
   }()
   lazy var pokemonIdLabel = {
@@ -80,7 +98,35 @@ class DetailViewController: UIViewController {
     super.viewDidLoad()
     view.backgroundColor = UIColor.mainRed
     configureUI()
+    
+    bind()
+
   }
+  
+
+  
+  
+  private func bind(){
+    
+    viewModel.pokemonDetailSubject
+     // .filter({ !$0.isEmpty })
+      .observe(on: MainScheduler.instance)
+      .subscribe(onNext: {[weak self] info in
+
+        self?.pokemonIdLabel.text = " NO. " + String(info.id ?? 404)
+        self?.pokemonName.text = info.name
+        self?.pokemonType.text = " 타입: " + (info.types?[0].type.name)!
+        self?.pokemonWeight.text = " 몸무게: " + String(info.height ?? 404 )
+        self?.pokemonHeight.text = " 키: " + String(info.height ?? 404 )
+        
+        
+      },
+                 
+                 onError: {error in
+        print(error)
+      }).disposed(by: disposeBag)
+  }
+  
   
   private func configureUI(){
     
@@ -135,4 +181,7 @@ class DetailViewController: UIViewController {
     
     
   }
+  
+  
+  
 }

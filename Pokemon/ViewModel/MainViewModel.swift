@@ -16,15 +16,30 @@ import RxSwift
 ///
 ///
 ///
-class PokemonViewModel {
+class MainViewModel {
+  
+  /// 디테일에 필요한 정보
+  
+  
+  
   private let disposeBag = DisposeBag()
   let domainString = "https://pokeapi.co/api/v2/pokemon?limit=20&offset=0"
+//  var pokemonID = ""
+  
+  
+
   
   let pokemonSubject = BehaviorSubject(value:[ResponseResult]())
+  
 
   
   init(){
+
+    
+    
+    
     fetchPokeData()
+
   }
   
   func fetchPokeData(){
@@ -43,8 +58,10 @@ class PokemonViewModel {
       
 
   }
-  func fetchPokeimage(){
-    
-  }
+  
+
   
 }
+
+
+
