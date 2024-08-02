@@ -36,11 +36,9 @@ class PokemonCell: UICollectionViewCell {
     imageView.image = nil
   }
   
-  func configure(){
-    
-//    guard let pokemonId = PokemonModel().id else { return }
-    
-    let urlStirng = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/54.png"
+  
+  func configure(with pId: String){
+    let urlStirng = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/\(pId).png"
     guard let url = URL(string: urlStirng) else { return }
     
     self.imageView.kf.setImage(with: url)

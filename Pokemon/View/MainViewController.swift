@@ -15,7 +15,7 @@ class MainViewController: UIViewController {
   private let diposeBag = DisposeBag()
   
   private var pokemonImages = ""
-  
+  private var pokemonListSubject = [ResponseResult]()
   private let imageView = {
     let iv = UIImageView()
     iv.image = UIImage(named: "pokeBallImage")
@@ -41,11 +41,23 @@ class MainViewController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     configureUI()
+    bind()
     // Do any additional setup after loading the view.
   }
   
   
-  
+  private func bind() {
+    viewModel.pokemonSubject
+      .observe(on: MainScheduler.instance)
+      .subscribe(onNext: {[weak self] lists in
+        self?.pokemonListSubject = lists
+//        print("MainViewControllerBinding Success",lists)
+      }, onError: { error in
+ //       print("MainViewControllerBinding Failure",error)
+      }
+                 
+      ).disposed(by: diposeBag)
+  }
 ///셀 사이즈와 셀 간격을 설정해주는 메서드
   private func createCellLayout() -> UICollectionViewLayout {
 ///각 셀간의 간격 10 설정
@@ -109,13 +121,16 @@ extension MainViewController: UICollectionViewDelegate {
 
 extension MainViewController: UICollectionViewDataSource{
   func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-    return 20
+    return pokemonListSubject.count
   }
   
   func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
     
-    guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PokemonCell.id, for: indexPath) as? PokemonCell else { return UICollectionViewCell()}
-    
+    guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PokemonCell.id, for: indexPath) as? PokemonCell 
+    else { return UICollectionViewCell()}
+    let pokemon = pokemonListSubject[indexPath.row]
+    print(pokemon.pokemonID)
+    cell.configure(with: "10")
     return cell
   }
   

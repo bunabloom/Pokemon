@@ -20,7 +20,8 @@ class PokemonViewModel {
   private let disposeBag = DisposeBag()
   let domainString = "https://pokeapi.co/api/v2/pokemon?limit=20&offset=0"
   
-  let pokemonSubject = BehaviorSubject(value:[PokemonModel]())
+  let pokemonSubject = BehaviorSubject(value:[ResponseResult]())
+
   
   init(){
     fetchPokeData()
@@ -29,10 +30,21 @@ class PokemonViewModel {
   func fetchPokeData(){
     guard let url = URL(string: domainString)
     else{ pokemonSubject.onError(NetworkError.dataFetchFail); return }
-    NetworkManager.shared.fetch(url: url)
-      .subscribe(onSuccess: { [weak self] pokeResponse: PokeResponse}
+    
+    NetworkManager.shared.fetch (url: url)
+      .subscribe(onSuccess: {[weak self] (pokeResponse:PokemonResponse) in
+
+        //print("Singleton Data fetch Success",pokeResponse)
+        self?.pokemonSubject.onNext(pokeResponse.results)},
+                 onFailure: {[weak self] error in
+        //print("Singleton Data fetch Failure",error)
+        self?.pokemonSubject.onError(error)}).disposed(by: disposeBag)
+      
       
 
+  }
+  func fetchPokeimage(){
+    
   }
   
 }
