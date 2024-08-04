@@ -46,6 +46,8 @@ struct TypeElement: Codable {
 }
 
 struct TypeType: Codable {
-    let name: String
+    let name: PokemonTypeName
+  
+  
 }
 

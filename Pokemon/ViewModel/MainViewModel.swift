@@ -19,11 +19,11 @@ import RxSwift
 class MainViewModel {
   
   /// 디테일에 필요한 정보
-  
-  
-  
+  private let LIMIT = 20
+  var offset = 0
+  // 오프셋을 추가해서 재호출해야함
   private let disposeBag = DisposeBag()
-  let domainString = "https://pokeapi.co/api/v2/pokemon?limit=20&offset=0"
+  var domainString : String{ return "https://pokeapi.co/api/v2/pokemon?limit=\(LIMIT)&offset=\(offset)" } 
 //  var pokemonID = ""
   
   
@@ -48,9 +48,13 @@ class MainViewModel {
     
     NetworkManager.shared.fetch (url: url)
       .subscribe(onSuccess: {[weak self] (pokeResponse:PokemonResponse) in
-
+        
+        
         //print("Singleton Data fetch Success",pokeResponse)
-        self?.pokemonSubject.onNext(pokeResponse.results)},
+        self?.pokemonSubject.onNext(pokeResponse.results)
+        self?.offset += 20
+        
+     },
                  onFailure: {[weak self] error in
         //print("Singleton Data fetch Failure",error)
         self?.pokemonSubject.onError(error)}).disposed(by: disposeBag)
@@ -58,6 +62,8 @@ class MainViewModel {
       
 
   }
+  
+  
   
 
   

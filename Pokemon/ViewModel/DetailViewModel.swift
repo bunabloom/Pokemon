@@ -32,17 +32,17 @@ class DetailViewModel {
     
     guard let url = URL(string: detailDomain)
     else{ pokemonDetailSubject.onError(NetworkError.dataFetchFail) ; return }
-    print(url)
+//    print(url)
     NetworkManager.shared.fetch(url: url)
       .subscribe(onSuccess: {[weak self] (pokemonModel:PokemonModel) in
-        print(#function,pokemonModel)
+//        print(#function,pokemonModel)
         self?.pokemonDetailSubject.onNext(pokemonModel)
         
       }, onFailure: {[weak self] error in
-        print(#function,error)
+//        print(#function,error)
         self?.pokemonDetailSubject.onError(error)
       }).disposed(by: disposeBag)
-    print(disposeBag)
+//    print(disposeBag)
           
     
   }

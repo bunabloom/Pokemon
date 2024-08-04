@@ -15,7 +15,7 @@ class DetailViewController: UIViewController {
 
   private var viewModel: DetailViewModel
   
-  init(viewModel: DetailViewModel) {
+  init(viewModel: DetailViewModel) {//
 
     self.viewModel = viewModel
     super.init(nibName: nil, bundle: nil)
@@ -55,23 +55,23 @@ class DetailViewController: UIViewController {
   lazy var pokemonIdLabel = {
     let iv = UILabel()
     iv.textColor = .white
-    iv.textAlignment = .left
-    iv.text = "NO.54"
+    iv.textAlignment = .right
+
     iv.font = UIFont.boldSystemFont(ofSize: 30)
     return iv
   }()
   lazy var pokemonName = {
     let iv = UILabel()
     iv.textColor = .white
-    iv.textAlignment = .right
-    iv.text = "고라파덕"
+    iv.textAlignment = .left
+
     iv.font = UIFont.boldSystemFont(ofSize: 30)
     return iv
   }()
   let pokemonType = {
     let iv = UILabel()
     iv.textColor = .white
-    iv.text = "타입"
+
     iv.textAlignment = .center
     iv.font = UIFont.boldSystemFont(ofSize: 20)
     return iv
@@ -79,7 +79,7 @@ class DetailViewController: UIViewController {
   let pokemonHeight = {
     let iv = UILabel()
     iv.textColor = .white
-    iv.text = "키"
+
     iv.textAlignment = .center
     iv.font = UIFont.boldSystemFont(ofSize: 20)
     return iv
@@ -112,10 +112,15 @@ class DetailViewController: UIViewController {
      // .filter({ !$0.isEmpty })
       .observe(on: MainScheduler.instance)
       .subscribe(onNext: {[weak self] info in
+        let krName = "  " +
+        PokemonTranslator.getKoreanName(for: info.name!)
+        
+        let krType = (info.types?[0].type.name.displayName)!
+//        print(krName,krType?.displayName)
 
-        self?.pokemonIdLabel.text = " NO. " + String(info.id ?? 404)
-        self?.pokemonName.text = info.name
-        self?.pokemonType.text = " 타입: " + (info.types?[0].type.name)!
+        self?.pokemonIdLabel.text = " NO." + String(info.id!)
+        self?.pokemonName.text = krName
+        self?.pokemonType.text = " 타입: " + krType
         self?.pokemonWeight.text = " 몸무게: " + String(info.height ?? 404 )
         self?.pokemonHeight.text = " 키: " + String(info.height ?? 404 )
         

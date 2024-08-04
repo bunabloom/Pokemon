@@ -11,13 +11,12 @@ import RxSwift
 
 class MainViewController: UIViewController {
   
+  private var isReloaded: Bool = false
   private let viewModel = MainViewModel()
-  
-
   private let diposeBag = DisposeBag()
-  
   private var pokemonImages = ""
   private var pokemonListSubject = [ResponseResult]()
+  //여기에 append로 추가를하고
   private let imageView = {
     let iv = UIImageView()
     iv.image = UIImage(named: "pokeBallImage")
@@ -34,7 +33,7 @@ class MainViewController: UIViewController {
     cv.register(PokemonCell.self, forCellWithReuseIdentifier: PokemonCell.id)
     cv.delegate = self
     cv.dataSource = self
-    cv.backgroundColor = .black
+    cv.backgroundColor = .darkRed
     return cv
   }()
   override func viewDidLoad() {
@@ -48,10 +47,12 @@ class MainViewController: UIViewController {
     viewModel.pokemonSubject
       .observe(on: MainScheduler.instance)
       .subscribe(onNext: {[weak self] lists in
-        self?.pokemonListSubject = lists
+        self?.pokemonListSubject.append(contentsOf: lists)
+        
 //        print("MainViewControllerBinding Success",lists)
       }, onError: { error in
  //       print("MainViewControllerBinding Failure",error)
+        self.isReloaded = false
       }
                  
       ).disposed(by: diposeBag)
@@ -113,7 +114,7 @@ extension MainViewController: UICollectionViewDelegate {
     let pokemon = pokemonListSubject[indexPath.row]
  //   detailViewController.pokemonID = pokemon.pokemonID
 //    detailViewController.pokemon = nil
-//    print(#function,pokemon.pokemonID)
+    print(#function,pokemon.pokemonID)
     let detailViewController = DetailViewController(viewModel: DetailViewModel(pokemonID: pokemon.pokemonID))
     self.navigationController?.pushViewController(detailViewController, animated: true)
 
@@ -136,5 +137,33 @@ extension MainViewController: UICollectionViewDataSource{
     return cell
   }
   
+  
+  func scrollViewDidScroll(_ scrollView: UIScrollView) {
+    guard !isReloaded else { return }
+    let offsetY = self.collectionView.contentOffset.y
+    let contentHeight = self.collectionView.contentSize.height
+    let height = collectionView.bounds.size.height
+    
+    if  offsetY > contentHeight - height{
+      isReloaded = true
+      //비동기 처리를 한후 완료 되면 다시 false로
+      loadMoreData()
+      
+
+      
+      
+    }
+    
+    
+  }
+  
+  
+  func loadMoreData(){
+    viewModel.fetchPokeData()
+   
+    bind()
+    collectionView.reloadData()
+    isReloaded = false
+  }
   
 }
