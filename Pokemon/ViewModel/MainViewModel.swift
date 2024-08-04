@@ -43,6 +43,7 @@ class MainViewModel {
   }
   
   func fetchPokeData(){
+    print(domainString)
     guard let url = URL(string: domainString)
     else{ pokemonSubject.onError(NetworkError.dataFetchFail); return }
     
@@ -52,7 +53,7 @@ class MainViewModel {
         
         //print("Singleton Data fetch Success",pokeResponse)
         self?.pokemonSubject.onNext(pokeResponse.results)
-        self?.offset += 20
+        
         
      },
                  onFailure: {[weak self] error in
@@ -61,6 +62,7 @@ class MainViewModel {
       
       
 
+    
   }
   
   

@@ -39,7 +39,7 @@ class MainViewController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     configureUI()
-    bind()
+    //bind()
     // Do any additional setup after loading the view.
   }
   
@@ -144,7 +144,8 @@ extension MainViewController: UICollectionViewDataSource{
     let contentHeight = self.collectionView.contentSize.height
     let height = collectionView.bounds.size.height
     
-    if  offsetY > contentHeight - height{
+    if  offsetY > contentHeight - height + 100{
+      print(offsetY, contentHeight, height)
       isReloaded = true
       //비동기 처리를 한후 완료 되면 다시 false로
       loadMoreData()
@@ -159,6 +160,7 @@ extension MainViewController: UICollectionViewDataSource{
   
   
   func loadMoreData(){
+    viewModel.offset += 20
     viewModel.fetchPokeData()
    
     bind()
