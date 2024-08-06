@@ -14,9 +14,7 @@ enum NetworkError: Error {
   case decodingFail
 }
 
-
-
-class NetworkManager {
+final class NetworkManager {
   static let shared = NetworkManager()
   
   private init() {}
@@ -24,18 +22,13 @@ class NetworkManager {
   func fetch<T: Decodable>(url: URL) -> Single<T> {
     return Single.create(subscribe: {
       observer in
-      
       let session = URLSession(configuration: .default)
-      
       session.dataTask(with: URLRequest(url: url)) {
         data, response, error in
-        
         if let error = error { observer( .failure(error) )
           return }
-        
         guard let data = data,
               let response = response as? HTTPURLResponse,(200..<300).contains(response.statusCode)
-                
         else {
           if let response = response as? HTTPURLResponse {
             print(#function,"StatusCode:",response.statusCode)
@@ -43,7 +36,6 @@ class NetworkManager {
           observer( .failure(NetworkError.dataFetchFail) )
           return
         }
-        
         do {
           let decodeData = try JSONDecoder().decode(T.self, from: data)
           observer(.success(decodeData))
@@ -54,7 +46,4 @@ class NetworkManager {
       return Disposables.create()
     })
   }
-  
-    
-  
 }

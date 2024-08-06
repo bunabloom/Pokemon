@@ -9,16 +9,10 @@ import Foundation
 import RxSwift
 
 final class DetailViewModel {
-  
   let pokemonDetailSubject = PublishSubject<PokemonModel>()
   private let disposeBag = DisposeBag()
-  
-  lazy var detailDomain = "https://pokeapi.co/api/v2/pokemon/\(pokemonID)/"
-  
+  lazy var urlString = "https://pokeapi.co/api/v2/pokemon/\(pokemonID)/"
   var pokemonID:String
-  
-  // 뷰디드 로드시점에 함수로 호출한다던지
-  
   
   init(pokemonID: String){
     self.pokemonID = pokemonID
@@ -26,21 +20,17 @@ final class DetailViewModel {
   }
   
   func fetchPokeDetailData(){
-    
-    guard let url = URL(string: detailDomain)
-    else{ pokemonDetailSubject.onError(NetworkError.dataFetchFail) ; return }
-//    print(url)
+    guard let url = URL(string: urlString)
+    else { pokemonDetailSubject
+      .onError(NetworkError.dataFetchFail)
+      return
+    }
     NetworkManager.shared.fetch(url: url)
       .subscribe(onSuccess: {[weak self] (pokemonModel:PokemonModel) in
-//        print(#function,pokemonModel)
         self?.pokemonDetailSubject.onNext(pokemonModel)
-          
-      }, onFailure: {[weak self] error in
-//        print(#function,error)
+      }, 
+                 onFailure: {[weak self] error in
         self?.pokemonDetailSubject.onError(error)
       }).disposed(by: disposeBag)
-//    print(disposeBag)
-          
-    
   }
 }

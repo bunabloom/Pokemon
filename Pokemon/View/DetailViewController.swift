@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 import Kingfisher
-import RxSwift
+import RxSwift ///구독과 방출의 매커니즘
 
 final class DetailViewController: UIViewController {
   
@@ -81,30 +81,34 @@ final class DetailViewController: UIViewController {
   
   override func viewDidLoad() {
     super.viewDidLoad()
-    view.backgroundColor = UIColor.mainRed
     configureUI()
     bind()
   }
   
-
   private func bind(){
     viewModel.pokemonDetailSubject
       .observe(on: MainScheduler.instance)
-      .subscribe(onNext: {[weak self] info in
-        let krName = "  " +
+      .subscribe(onNext: {  [weak self] info in
+        
+        let idString = " NO." + String(info.id!)
+        let nameString = "  " +
         PokemonTranslator.getKoreanName(for: info.name!)
-        let krType = (info.types?[0].type.name.displayName)!
-        self?.pokemonIdLabel.text = " NO." + String(info.id!)
-        self?.pokemonName.text = krName
-        self?.pokemonType.text =  krType + "타입 포켓몬" 
-        self?.pokemonWeight.text = " 몸무게: " + String(info.height ?? 404 )
-        self?.pokemonHeight.text = " 키: " + String(info.height ?? 404 )
-      },onError: {
-        error in print(error)
+        let typeString = (info.types?[0].type.name.displayName)! + "타입 포켓몬"
+        let weightString = "키: \(String(format: "%.1f", info.weight! * 0.1))cm"
+        let heightString = " 몸무게: \(String(format: "%.1f", info.height! * 0.1))kg"
+        
+        self?.pokemonIdLabel.text = idString
+        self?.pokemonName.text = nameString
+        self?.pokemonType.text =  typeString
+        self?.pokemonWeight.text =  weightString
+        self?.pokemonHeight.text = heightString
+      },
+                 onError: { error in
+        print(error)
       }).disposed(by: disposeBag)
   }
-  
   private func configureUI(){
+    view.backgroundColor = UIColor.mainRed
     view.addSubview(backgroundview)
     backgroundview.snp.makeConstraints{
       $0.top.equalToSuperview().offset(100)
@@ -137,20 +141,17 @@ final class DetailViewController: UIViewController {
       $0.width.equalTo(150)
       $0.height.equalTo(50)
     }
-    pokemonHeight.snp.makeConstraints{
+    pokemonWeight.snp.makeConstraints{
       $0.top.equalTo(pokemonType.snp.bottom).offset(5)
       $0.centerX.equalToSuperview()
       $0.width.equalTo(150)
       $0.height.equalTo(50)
     }
-    pokemonWeight.snp.makeConstraints{
-      $0.top.equalTo(pokemonHeight.snp.bottom).offset(5)
+    pokemonHeight.snp.makeConstraints{
+      $0.top.equalTo(pokemonWeight.snp.bottom).offset(5)
       $0.centerX.equalToSuperview()
       $0.width.equalTo(150)
       $0.height.equalTo(50)
     }
   }
-  
-  
-  
 }

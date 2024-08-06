@@ -9,7 +9,7 @@ import UIKit
 import SnapKit
 import Kingfisher
 
-class PokemonCell: UICollectionViewCell {
+final class PokemonCell: UICollectionViewCell {
   static let id = "PokemonCell"
   
   let imageView = {
@@ -35,6 +35,7 @@ class PokemonCell: UICollectionViewCell {
   func configure(with pokemonId: String){
     let urlStirng = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/\(pokemonId).png"
     guard let url = URL(string: urlStirng) else { return }
+  
     self.imageView.kf.setImage(with: url)
   }
   
