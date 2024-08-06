@@ -15,6 +15,7 @@ class MainViewController: UIViewController {
   private let viewModel = MainViewModel()
   private let diposeBag = DisposeBag()
   private var pokemonImages = ""
+  
   private var pokemonListSubject = [ResponseResult]()
   //여기에 append로 추가를하고
   private let imageView = {
@@ -27,7 +28,6 @@ class MainViewController: UIViewController {
     iv.clipsToBounds = true
     return iv
   }()
-  
   lazy var collectionView = {
     let cv = UICollectionView(frame: .zero,collectionViewLayout: createCellLayout())
     cv.register(PokemonCell.self, forCellWithReuseIdentifier: PokemonCell.id)
@@ -36,11 +36,12 @@ class MainViewController: UIViewController {
     cv.backgroundColor = .darkRed
     return cv
   }()
+  
   override func viewDidLoad() {
     super.viewDidLoad()
     configureUI()
-    //bind()
-    // Do any additional setup after loading the view.
+    bind()
+    
   }
   
   private func bind() {
@@ -65,7 +66,6 @@ class MainViewController: UIViewController {
     let itemsPerRow: CGFloat = 3
 ///각 셀당 의 가로길이 계산법  (뷰의 넓이  빼기 (셀개수 곱하기 셀간격)) 셀 개수
     let width = (view.frame.width - (itemsPerRow - 1) * itemSpacing) / itemsPerRow
-    
     let layout = {
       let lo = UICollectionViewFlowLayout()
       lo.itemSize = CGSize(width: width, height: width)
@@ -76,7 +76,6 @@ class MainViewController: UIViewController {
     return layout
     
   }
-/// UI설정
   private func configureUI() {
     view.backgroundColor = UIColor.mainRed
     
@@ -107,10 +106,7 @@ class MainViewController: UIViewController {
 extension MainViewController: UICollectionViewDelegate {
   func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
    
-    
-/// 여기에서 값을 전달 해줘야함 어떻게?
-    /// 일단 id는 알아 근데 id로 데이터 값을 아 url 이 있으니까 
-
+    print(indexPath.section,indexPath.row)
     let pokemon = pokemonListSubject[indexPath.row]
  //   detailViewController.pokemonID = pokemon.pokemonID
 //    detailViewController.pokemon = nil
@@ -131,39 +127,39 @@ extension MainViewController: UICollectionViewDataSource{
     
     guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PokemonCell.id, for: indexPath) as? PokemonCell 
     else { return UICollectionViewCell()}
+    
     let pokemon = pokemonListSubject[indexPath.row]
-    //print(pokemon.pokemonID)
+//    print(pokemon)
     cell.configure(with: pokemon.pokemonID)
+    
     return cell
   }
   
+  // 여기 수정해야함
+  
+  
+  
   
   func scrollViewDidScroll(_ scrollView: UIScrollView) {
-    guard !isReloaded else { return }
-    let offsetY = self.collectionView.contentOffset.y
-    let contentHeight = self.collectionView.contentSize.height
+    let offsetY = scrollView.contentOffset.y
     let height = collectionView.bounds.size.height
+    let contentHeight_offset = offsetY + height
     
-    if  offsetY > contentHeight - height + 100{
-      print(offsetY, contentHeight, height)
-      isReloaded = true
+    let onceReload = CGFloat(930)
+//    print(#function,offsetY, height)
+    if  offsetY  > 552 {
+//      print(offsetY, height, contentHeight_offset)
+
       //비동기 처리를 한후 완료 되면 다시 false로
       loadMoreData()
-      
 
-      
-      
     }
-    
-    
   }
   
   
-  func loadMoreData(){
-    viewModel.offset += 20
+  @objc func loadMoreData(){
+    
     viewModel.fetchPokeData()
-   
-    bind()
     collectionView.reloadData()
     isReloaded = false
   }

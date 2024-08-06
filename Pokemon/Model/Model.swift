@@ -38,7 +38,8 @@ struct PokemonModel: Codable {
     let id: Int?
     let name: String?
     let types: [TypeElement]?
-    let height, weight: Int?
+  let height: Int?
+  let weight: Int?
 }
 
 struct TypeElement: Codable {
@@ -48,6 +49,6 @@ struct TypeElement: Codable {
 struct TypeType: Codable {
     let name: PokemonTypeName
   
-  
 }
+
 

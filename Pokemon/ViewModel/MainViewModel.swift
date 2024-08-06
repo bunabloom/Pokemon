@@ -16,52 +16,48 @@ import RxSwift
 ///
 ///
 ///
-class MainViewModel {
+final class MainViewModel {
   
+  var isRequest = false
   /// 디테일에 필요한 정보
-  private let LIMIT = 20
   var offset = 0
   // 오프셋을 추가해서 재호출해야함
   private let disposeBag = DisposeBag()
-  var domainString : String{ return "https://pokeapi.co/api/v2/pokemon?limit=\(LIMIT)&offset=\(offset)" } 
-//  var pokemonID = ""
-  
-  
-
-  
+  var domainString : String{ return "https://pokeapi.co/api/v2/pokemon?limit=20&offset=\(offset)" }
   let pokemonSubject = BehaviorSubject(value:[ResponseResult]())
   
-
-  
   init(){
-
-    
-    
-    
     fetchPokeData()
-
   }
   
-  func fetchPokeData(){
-    print(domainString)
-    guard let url = URL(string: domainString)
-    else{ pokemonSubject.onError(NetworkError.dataFetchFail); return }
+  final func fetchPokeData(){
+    guard isRequest != true else { return }
+    isRequest = true
     
-    NetworkManager.shared.fetch (url: url)
-      .subscribe(onSuccess: {[weak self] (pokeResponse:PokemonResponse) in
-        
-        
-        //print("Singleton Data fetch Success",pokeResponse)
-        self?.pokemonSubject.onNext(pokeResponse.results)
-        
-        
-     },
-                 onFailure: {[weak self] error in
-        //print("Singleton Data fetch Failure",error)
-        self?.pokemonSubject.onError(error)}).disposed(by: disposeBag)
+    guard let url = URL(string: domainString)
+    
+            
+    else{
+      pokemonSubject.onError(NetworkError.dataFetchFail)
+      return
+    }
+    print(url)
+    
       
+      NetworkManager.shared.fetch (url: url)
+        .subscribe(onSuccess: {[weak self] (pokeResponse:PokemonResponse) in
+          print("Singleton Data fetch Success",pokeResponse)
+          self?.pokemonSubject.onNext(pokeResponse.results)
+          self?.isRequest = false
+          self?.offset += 20
+       },
+                   onFailure: {[weak self] error in
+          //print("Singleton Data fetch Failure",error)
+          self?.pokemonSubject.onError(error)
+          self?.isRequest = false
+        }).disposed(by: disposeBag)
       
-
+    
     
   }
   

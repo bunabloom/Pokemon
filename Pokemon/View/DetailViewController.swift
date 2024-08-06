@@ -10,42 +10,25 @@ import SnapKit
 import Kingfisher
 import RxSwift
 
-class DetailViewController: UIViewController {
+final class DetailViewController: UIViewController {
   
-
   private var viewModel: DetailViewModel
-  
-  init(viewModel: DetailViewModel) {//
-
-    self.viewModel = viewModel
-    super.init(nibName: nil, bundle: nil)
-  }
-  
-  
-  required init?(coder: NSCoder) {
-    fatalError("init(coder:) has not been implemented")
-  }
-  //동작
-  
   private let disposeBag = DisposeBag()
   
-  
-  let backgroundview = {
+
+  private let backgroundview = {
     let view = UIView()
     view.clipsToBounds = true
     view.layer.cornerRadius = 10
     view.backgroundColor = UIColor.darkRed
     return view
   }()
-  
   lazy var imageLabel = {
     let iv = UIImageView()
     iv.clipsToBounds = true
-    
     iv.kf.setImage(with:URL(string: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/\(viewModel.pokemonID).png"))
     return iv
   }()
-  
   lazy var stackView = {
     let sv = UIStackView(arrangedSubviews: [pokemonIdLabel,pokemonName])
     sv.axis = .horizontal
@@ -56,7 +39,6 @@ class DetailViewController: UIViewController {
     let iv = UILabel()
     iv.textColor = .white
     iv.textAlignment = .right
-
     iv.font = UIFont.boldSystemFont(ofSize: 30)
     return iv
   }()
@@ -64,79 +46,66 @@ class DetailViewController: UIViewController {
     let iv = UILabel()
     iv.textColor = .white
     iv.textAlignment = .left
-
     iv.font = UIFont.boldSystemFont(ofSize: 30)
     return iv
   }()
-  let pokemonType = {
+  lazy var pokemonType = {
     let iv = UILabel()
     iv.textColor = .white
-
     iv.textAlignment = .center
     iv.font = UIFont.boldSystemFont(ofSize: 20)
     return iv
   }()
-  let pokemonHeight = {
+  lazy var pokemonHeight = {
     let iv = UILabel()
     iv.textColor = .white
-
     iv.textAlignment = .center
     iv.font = UIFont.boldSystemFont(ofSize: 20)
     return iv
   }()
-  let pokemonWeight = {
+  lazy var pokemonWeight = {
     let iv = UILabel()
     iv.textColor = .white
-    iv.text = "몸무게"
     iv.textAlignment = .center
     iv.font = UIFont.boldSystemFont(ofSize: 20)
     return iv
   }()
   
+  init(viewModel: DetailViewModel) {
+    self.viewModel = viewModel
+    super.init(nibName: nil, bundle: nil)
+  }
+  required init?(coder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
   
   override func viewDidLoad() {
     super.viewDidLoad()
     view.backgroundColor = UIColor.mainRed
     configureUI()
-    
     bind()
-
   }
   
 
-  
-  
   private func bind(){
-    
     viewModel.pokemonDetailSubject
-     // .filter({ !$0.isEmpty })
       .observe(on: MainScheduler.instance)
       .subscribe(onNext: {[weak self] info in
         let krName = "  " +
         PokemonTranslator.getKoreanName(for: info.name!)
-        
         let krType = (info.types?[0].type.name.displayName)!
-//        print(krName,krType?.displayName)
-
         self?.pokemonIdLabel.text = " NO." + String(info.id!)
         self?.pokemonName.text = krName
-        self?.pokemonType.text = " 타입: " + krType
+        self?.pokemonType.text =  krType + "타입 포켓몬" 
         self?.pokemonWeight.text = " 몸무게: " + String(info.height ?? 404 )
         self?.pokemonHeight.text = " 키: " + String(info.height ?? 404 )
-        
-        
-      },
-                 
-                 onError: {error in
-        print(error)
+      },onError: {
+        error in print(error)
       }).disposed(by: disposeBag)
   }
   
-  
   private func configureUI(){
-    
     view.addSubview(backgroundview)
-    
     backgroundview.snp.makeConstraints{
       $0.top.equalToSuperview().offset(100)
       $0.centerX.equalToSuperview()
@@ -150,15 +119,12 @@ class DetailViewController: UIViewController {
       pokemonHeight,
       pokemonWeight
     ].forEach{backgroundview.addSubview($0)}
-    
-
     imageLabel.snp.makeConstraints{
       $0.top.equalTo(backgroundview.snp.top).offset(10)
       $0.centerX.equalToSuperview()
       $0.width.equalTo(200)
       $0.height.equalTo(200)
     }
-    
     stackView.snp.makeConstraints{
       $0.top.equalTo(imageLabel.snp.bottom).offset(5)
       $0.centerX.equalToSuperview()
@@ -183,8 +149,6 @@ class DetailViewController: UIViewController {
       $0.width.equalTo(150)
       $0.height.equalTo(50)
     }
-    
-    
   }
   
   

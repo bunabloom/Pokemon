@@ -8,7 +8,7 @@
 import Foundation
 import RxSwift
 
-class DetailViewModel {
+final class DetailViewModel {
   
   let pokemonDetailSubject = PublishSubject<PokemonModel>()
   private let disposeBag = DisposeBag()
@@ -25,9 +25,6 @@ class DetailViewModel {
     fetchPokeDetailData()
   }
   
-  
-  
-  
   func fetchPokeDetailData(){
     
     guard let url = URL(string: detailDomain)
@@ -37,7 +34,7 @@ class DetailViewModel {
       .subscribe(onSuccess: {[weak self] (pokemonModel:PokemonModel) in
 //        print(#function,pokemonModel)
         self?.pokemonDetailSubject.onNext(pokemonModel)
-        
+          
       }, onFailure: {[weak self] error in
 //        print(#function,error)
         self?.pokemonDetailSubject.onError(error)
