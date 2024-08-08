@@ -42,4 +42,6 @@ final class MainViewModel {
 }
 
 
+// rx operator 중에서 flatmap, 쓰로틀 디바운스
+
 

@@ -13,12 +13,12 @@ enum NetworkError: Error {
   case dataFetchFail
   case decodingFail
 }
-
+// 에러가 났을때 네트워크 요청에 시간이 지연이 되었을때 "네트워크 연결 상태를 확인해주세요 "
 final class NetworkManager {
   static let shared = NetworkManager()
   
   private init() {}
-  
+  //왜 싱글인가에대해서
   func fetch<T: Decodable>(url: URL) -> Single<T> {
     return Single.create(subscribe: {
       observer in

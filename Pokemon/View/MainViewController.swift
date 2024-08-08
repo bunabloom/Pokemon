@@ -97,7 +97,7 @@ final class MainViewController: UIViewController {
 extension MainViewController: UICollectionViewDelegate {
   func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
     let pokemon = pokemonListSubject[indexPath.row]
-    let detailViewController = DetailViewController(viewModel: DetailViewModel(pokemonID: pokemon.pokemonID))
+    let detailViewController = DetailViewController(pokemonID: pokemon.pokemonID)
     self.navigationController?.pushViewController(detailViewController, animated: true)
 
   }
